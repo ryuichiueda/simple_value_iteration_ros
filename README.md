@@ -123,3 +123,5 @@ In this stage, we cannot change the order of the sections.
     %%final states%%
     state 2 value 0
 
+There is another example state_transition_file `example_state_trans_prob'
+in the directory. In this file, state transitions are defined stochastically.
