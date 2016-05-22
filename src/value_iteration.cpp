@@ -7,25 +7,30 @@
 #include <thread>
 using namespace std;
 
-int sweep(int argc, char const* argv[]);
 void worker(int start_pos,StateTrans *st);
-
 bool do_sweeps(simple_value_iteration_ros::DoSweeps::Request &req,
 	simple_value_iteration_ros::DoSweeps::Response &res);
 void die(string reason);
+
+void worker(int start_pos,StateTrans *st) {
+	//no need of exclusive control due to the property of value functions
+	st->valueIteration(start_pos);
+}
 
 void die(string reason){
 	ROS_INFO(reason.c_str());
 	exit(1);
 }
 
+StateTrans st;
+
 bool do_sweeps(simple_value_iteration_ros::DoSweeps::Request &req,
 		simple_value_iteration_ros::DoSweeps::Response &res)
 {
-	StateTrans st;
 	//reading data from file
-	if(! st.readStateTransFile(req.state_transition_file.c_str()))
-		die("state_trans file error");
+	if(req.initialize)
+		if(! st.readStateTransFile(req.state_transition_file.c_str()))
+			die("state_trans file error");
 
 	//execution with n threads
 	int worker_num = req.thread_num;
@@ -46,32 +51,29 @@ bool do_sweeps(simple_value_iteration_ros::DoSweeps::Request &req,
 	}
 
 	st.printValues();
-/*   res.sum = req.a + req.b;
-   8   ROS_INFO("request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
-   9   ROS_INFO("sending back response: [%ld]", (long int)res.sum);
-  10   return true;
-*/
-	return true;
-}
 
-void worker(int start_pos,StateTrans *st) {
-	//no need of exclusive control due to the property of value functions
-	st->valueIteration(start_pos);
+	if(st.isConverged()){
+		st.printActions();
+	}
+
+	return true;
 }
 
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "value_iteration");
 	ros::NodeHandle n;
-	ros::ServiceServer service = n.advertiseService("do_sweeps", do_sweeps);
+
+	ros::ServiceServer swp = n.advertiseService("do_sweeps", do_sweeps);
 	ROS_INFO("Prepared the node");
+
 	ros::spin();
 
 	return 0;
 }
 
 
-
+/*
 int sweep(int argc, char const* argv[])
 {
 	//handling of options
@@ -114,3 +116,4 @@ int sweep(int argc, char const* argv[])
 	}
 	exit(0);
 }
+*/

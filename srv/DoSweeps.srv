@@ -1,5 +1,6 @@
 string work_dir
 string state_transition_file
 uint32 thread_num
+bool initialize
 ---
 string messages
