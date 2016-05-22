@@ -112,6 +112,9 @@ bool StateTrans::readStateTransFile(const char *filename)
 	ifstream ifs_state_trans(filename);
 	string buf;
 
+	if(!ifs_state_trans)
+		return false;
+
 	//parse of header in state transition file
 	while(ifs_state_trans && getline(ifs_state_trans,buf)){
 		if(parseHeader(buf) == false)
@@ -121,20 +124,28 @@ bool StateTrans::readStateTransFile(const char *filename)
 	//checking global setting
 	//g_state_trans.status();
 
-	//parse of state transtions in state transition file
+	//parse of state transtions
 	while(ifs_state_trans && getline(ifs_state_trans,buf)){
 		if(parseStateTrans(buf) == false)
 			break;
 	}
 
+	//parse of final states
+	while(ifs_state_trans && getline(ifs_state_trans,buf)){
+		if(parseFinalStates(buf) == false)
+			break;
+	}
+
 	ifs_state_trans.close();
 
+/*
 	//read of state values
 	while(! cin.eof()){
 		unsigned long s,v;
 		cin >> s >> v;
 		setValue(s,v);
 	}
+*/
 
 	return true;
 }
@@ -170,6 +181,9 @@ bool StateTrans::parseStateTrans(string &line)
 	if(words.size() < 1)
 		return true;
 
+	if(words[0].at(0) == '%')
+		return false;
+
 	static int state_index = -1;
 	static int action_index = -1;
 	if(words[0] == "state"){
@@ -198,6 +212,35 @@ bool StateTrans::parseStateTrans(string &line)
 		setStateTrans(state_index,action_index,s_after,p,c);
 	}
 
+	return true;
+}
+
+bool StateTrans::parseFinalStates(string &line)
+{
+	vector<string> words;
+	tokenizer(line,words);
+	if(words.size() < 1)
+		return true;
+
+	if(words[0].at(0) == '%')
+		return false;
+
+	static int state_index = -1;
+	static int value = 0;
+	if(words[0] == "state"){
+		state_index = atoi(words[1].c_str());
+		value = atoi(words[3].c_str());
+		setValue(state_index,value);
+
+		if(state_index < 0){
+			cerr << "Invalid State No." << endl;
+			return false;
+		}
+	}else{
+		cerr << "Invalid statement" << endl;
+		return false;
+	}
+	
 	return true;
 }
 

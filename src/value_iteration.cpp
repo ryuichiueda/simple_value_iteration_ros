@@ -1,5 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "simple_value_iteration_ros/DoSweeps.h"
 #include <iostream>
 #include <vector>
 #include "StateTrans.h"
@@ -7,10 +8,50 @@
 using namespace std;
 
 int sweep(int argc, char const* argv[]);
+void worker(int start_pos,StateTrans *st);
 
-void chatterCallback(const std_msgs::String::ConstPtr& msg)
+bool do_sweeps(simple_value_iteration_ros::DoSweeps::Request &req,
+	simple_value_iteration_ros::DoSweeps::Response &res);
+void die(string reason);
+
+void die(string reason){
+	ROS_INFO(reason.c_str());
+	exit(1);
+}
+
+bool do_sweeps(simple_value_iteration_ros::DoSweeps::Request &req,
+		simple_value_iteration_ros::DoSweeps::Response &res)
 {
-	ROS_INFO("I heard: [%s]", msg->data.c_str());
+	StateTrans st;
+	//reading data from file
+	if(! st.readStateTransFile(req.state_transition_file.c_str()))
+		die("state_trans file error");
+
+	//execution with n threads
+	int worker_num = req.thread_num;
+	if(worker_num <= 0)
+		worker_num = 1;
+
+	vector<thread> th;
+	for(int n=0;n<worker_num;n++){
+		unsigned long start_pos = (unsigned long)
+			(double(st.getStateNum())/worker_num*n);
+
+		th.push_back(thread(worker,start_pos,&st));
+	}
+
+	//waiting
+	for(int n=0;n<worker_num;n++){
+		th[n].join();
+	}
+
+	st.printValues();
+/*   res.sum = req.a + req.b;
+   8   ROS_INFO("request: x=%ld, y=%ld", (long int)req.a, (long int)req.b);
+   9   ROS_INFO("sending back response: [%ld]", (long int)res.sum);
+  10   return true;
+*/
+	return true;
 }
 
 void worker(int start_pos,StateTrans *st) {
@@ -22,19 +63,13 @@ int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "value_iteration");
 	ros::NodeHandle n;
-	ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
+	ros::ServiceServer service = n.advertiseService("do_sweeps", do_sweeps);
+	ROS_INFO("Prepared the node");
 	ros::spin();
-
-	sweep(argc,(char const **)argv);
 
 	return 0;
 }
 
-
-void die(string reason){
-	cerr << "value_iteration: [ERROR] " << reason << endl;
-	exit(1);
-}
 
 
 int sweep(int argc, char const* argv[])

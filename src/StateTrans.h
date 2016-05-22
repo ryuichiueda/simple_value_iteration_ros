@@ -22,6 +22,7 @@ private:
 	//functions for file reading
 	bool parseHeader(string &line);
 	bool parseStateTrans(string &line);
+	bool parseFinalStates(string &line);
 	bool tokenizer(string &line,vector<string> &words);
 
 	bool m_converged;
