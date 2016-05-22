@@ -105,10 +105,10 @@ In this stage, we cannot change the order of the sections.
     actions left right up down
     
     %%state transitions%%
-    state 6 action right
-    	state 7 prob. 1 cost 1000
+    state 6 action right            # the prior state
+    	state 7 prob. 1 cost 1000   # a posterior state
     state 6 action up
-    	state 3 prob. 1 cost 1000
+    	state 3 prob. 1 cost 1000   # Cost 1000 is given to one step action.
     
     state 7 action right
     	state 8 prob. 1 cost 1000
@@ -125,3 +125,10 @@ In this stage, we cannot change the order of the sections.
 
 There is another example state_transition_file `example_state_trans_prob'
 in the directory. In this file, state transitions are defined stochastically.
+
+    ....
+    state 1 action up
+        state 4 prob. 0.8 cost 1000 # Multiple posterior states
+        state 0 prob. 0.1 cost 1000 # are written in this case.
+        state 2 prob. 0.1 cost 1000
+    ....
