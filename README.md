@@ -45,19 +45,19 @@ In sample.py executed above solve the following problem.
 
 We assume the following tile world.
 
-|-----------------------|
-|       |       |       |
-|state 0|state 1|state 2|
-|       |       |       |
-|-----------------------|
-|       |       |       |
-|state 3|state 4|state 5|
-|       |       |       |
-|-------|-------|-------|
-|       |       |       |
-|state 6|state 7|state 8|
-|       |       |       |
-|-------|-------|-------|
+    |-----------------------|
+    |       |       |       |
+    |state 0|state 1|state 2|
+    |       |       |       |
+    |-----------------------|
+    |       |       |       |
+    |state 3|state 4|state 5|
+    |       |       |       |
+    |-------|-------|-------|
+    |       |       |       |
+    |state 6|state 7|state 8|
+    |       |       |       |
+    |-------|-------|-------|
 
 At first, a robot exists one of the state. The task is that the robot goes to
 the state 2 from any initial state with minimum number of steps.
@@ -73,19 +73,19 @@ The optimal value function
 will be calculated from this
 definition.
 
-|-----------------------|
-|       |       |       |
-|   2   |   1   |   0   |
-|       |       |       |
-|-----------------------|
-|       |       |       |
-|   3   |   2   |   1   |
-|       |       |       |
-|-------|-------|-------|
-|       |       |       |
-|   4   |   3   |   2   |
-|       |       |       |
-|-------|-------|-------|
+    |-----------------------|
+    |       |       |       |
+    |   2   |   1   |   0   |
+    |       |       |       |
+    |-----------------------|
+    |       |       |       |
+    |   3   |   2   |   1   |
+    |       |       |       |
+    |-------|-------|-------|
+    |       |       |       |
+    |   4   |   3   |   2   |
+    |       |       |       |
+    |-------|-------|-------|
 
 
 # format of a state_transition_file
