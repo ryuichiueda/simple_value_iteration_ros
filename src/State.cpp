@@ -69,22 +69,6 @@ unsigned long State::valueIterationAction(int a,vector<State> &other_state)
 	return v >> 16;
 }
 
-/*
-unsigned long State::valueIterationAction(Action *a,vector<State> &other_state)
-{
-	vector<Transition> *trans = &(a->trans);
-
-	unsigned long v = 0;
-	for(auto i=trans->begin();i<trans->end();i++){
-		unsigned long tmp = other_state.at(i->posterior_state).getValue() + (i->cost);
-		v += tmp * i->probability;
-	}
-	return v >> 16;
-}
-*/
-
-
-
 void State::setValue(unsigned long v)
 {
 	m_value = v;

@@ -1,5 +1,6 @@
 #include "StateTrans.h"
 #include <climits>
+#include <cmath>
 #include <fstream>
 #include <sstream>
 #include "State.h"
@@ -7,10 +8,17 @@ using namespace std;
 
 StateTrans::StateTrans()
 {
-	m_converged = true;
+	init();
 }
 
 StateTrans::~StateTrans(){}
+
+void StateTrans::init(void)
+{
+	m_delta = 0.0;
+	m_states.clear();
+	m_actions.clear();
+}
 
 bool StateTrans::setStateNum(const string &str)
 {
@@ -38,6 +46,7 @@ bool StateTrans::setAction(const string &action)
 	return true;
 }
 
+/*
 void StateTrans::status(void)
 {
 	cerr << "statenum: " << m_state_num << endl;
@@ -47,6 +56,7 @@ void StateTrans::status(void)
 	}
 	cerr << endl;
 }
+*/
 
 State* StateTrans::getState(unsigned long index)
 {
@@ -70,17 +80,22 @@ bool StateTrans::setStateTrans(unsigned long s,int a,unsigned long s_to,double p
 
 bool StateTrans::valueIteration(unsigned long start_num)
 {
+	double delta = 0.0;
 	for(unsigned long i=start_num;i<m_state_num+start_num;i++){
 		unsigned long index = (i + m_state_num)%m_state_num;
 		unsigned long v = m_states[index].valueIteration(m_states);
 		unsigned long prv = m_states[index].getValue();
 
-		if(prv != v)
-			m_converged = false;
+		//cerr << index << ' ' << v << ' ' << prv << endl;
+		double d = fabs((double)v - (double)prv);
+		if(delta < d)
+			delta = d;
 
 		m_states[index].setValue(v);
+		//cerr << "***" <<  m_states[index].getValue() << endl;
 
 	}
+	m_delta = delta;
 	return true;
 }
 
@@ -90,21 +105,32 @@ bool StateTrans::setValue(unsigned long s,unsigned long v)
 	return true;
 }
 
-void StateTrans::printValues(void)
+bool StateTrans::printValues(string filename)
 {
+	ofstream ofs(filename);
+	if(!ofs)
+		return false;
+
 	for(unsigned long i=0;i<m_state_num;i++){
-		cout << i << " " << m_states[i].getValue() << endl;
+		ofs << i << " " << m_states[i].getValue() << endl;
 	}
+	ofs.close();
+	return true;
 }
 
-void StateTrans::printActions(void)
+bool StateTrans::printActions(string filename)
 {
-	ofstream ofs("policy");
+	ofstream ofs(filename);
+	if(!ofs)
+		return false;
+
 	for(unsigned long i=0;i<m_state_num;i++){
 		int a = m_states[i].getActionIndex();
 		if(a >= 0)
 			ofs << i << " " << m_actions[a] << endl;
 	}
+	ofs.close();
+	return true;
 }
 
 bool StateTrans::readStateTransFile(const char *filename)
@@ -137,15 +163,6 @@ bool StateTrans::readStateTransFile(const char *filename)
 	}
 
 	ifs_state_trans.close();
-
-/*
-	//read of state values
-	while(! cin.eof()){
-		unsigned long s,v;
-		cin >> s >> v;
-		setValue(s,v);
-	}
-*/
 
 	return true;
 }
