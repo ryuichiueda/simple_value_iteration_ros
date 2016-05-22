@@ -17,6 +17,10 @@ which is shown in ./scripts/example_state_trans.
 
 2. launch the sample script
 
+In the case of this example, two sweeps are executed. In the second sweep, 
+two threads are invoked. How to call services and how to use the multi-thread
+mode are shown in the sample python code.
+
     ```
     $ rosrun simple_value_iteration_ros sample.py 
     ### sweep 0 ###
