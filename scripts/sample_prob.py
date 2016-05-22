@@ -15,15 +15,12 @@ def do_value_iteration(t_num,init):
 
     return res.delta
 
-def get_the_result():
+def get_values():
     try:
-        # get the result
-        suffix = 'tmp' + str(os.getpid())
         s = rospy.ServiceProxy('flush_data',FlushData)
-        delta = s(work_dir='/tmp',filename=suffix)
 
-        v_file = '/tmp/' + suffix + '.value'
-        p_file = '/tmp/' + suffix + '.policy'
+        v_file = '/tmp/tmp' + str(os.getpid()) + '.value'
+        s(work_dir='',filename=v_file,type="values")
     
     except rospy.ServiceException, e:
         print "Service call failed: %s"%e
@@ -32,11 +29,18 @@ def get_the_result():
         print "values:"
         for line in f: print '\t' + line,
 
-    with open(p_file,'r') as f:
-        print "policy:"
-        for line in f: print '\t' + line,
-
     os.remove(v_file)
+
+def get_policy():
+    try:
+        s = rospy.ServiceProxy('flush_data',FlushData)
+
+        p_file = '/tmp/tmp' + str(os.getpid()) + '.policy'
+        s(work_dir='',filename=p_file,type="policy")
+    
+    except rospy.ServiceException, e:
+        print "Service call failed: %s"%e
+
     os.remove(p_file)
     	
 if __name__ == '__main__':
@@ -46,12 +50,14 @@ if __name__ == '__main__':
     n = 0
     print "### sweep %d ###" % n
     delta = do_value_iteration(2,True)
-    get_the_result()
+    get_values()
+    get_policy()
     n = n + 1
 
     while delta > 0.001:
         print "### sweep %d ###" % n
         delta = do_value_iteration(8,False)
-        get_the_result()
+        get_values()
+        get_policy()
         n = n + 1
     

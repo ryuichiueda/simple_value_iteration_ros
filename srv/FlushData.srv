@@ -1,4 +1,5 @@
 string work_dir
 string filename
+string type
 ---
 string file

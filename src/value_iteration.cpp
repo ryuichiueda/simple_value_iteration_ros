@@ -31,13 +31,16 @@ StateTrans st;
 bool flush_data(simple_value_iteration_ros::FlushData::Request &req,
 		simple_value_iteration_ros::FlushData::Response &res)
 {
-	string v_filename = req.work_dir + '/' + req.filename + ".value";
-	if(!st.printValues(v_filename))
-		die("value file write error");
+	string v_filename = req.work_dir + '/' + req.filename;
 
-	string p_filename = req.work_dir + '/' + req.filename + ".policy";
-	if(!st.printActions(p_filename))
-		die("policy file write error");
+	if(req.type == "values"){
+		if(!st.printValues(v_filename))
+			die("file write error");
+	}else if(req.type == "policy"){
+		if(!st.printActions(v_filename))
+			die("file write error");
+	}else		
+		die("unknown data type");
 
 	res.file = req.work_dir + '/' + req.filename;
 	return true;
