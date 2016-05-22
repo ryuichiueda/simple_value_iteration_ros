@@ -127,6 +127,8 @@ There is another example state_transition_file `example_state_trans_prob'
 in the directory. In this file, state transitions are defined stochastically.
 
     ....
+    %%state transitions%%
+    ....
     state 1 action up
         state 4 prob. 0.8 cost 1000 # Multiple posterior states
         state 0 prob. 0.1 cost 1000 # are written in this case.
