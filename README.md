@@ -23,7 +23,7 @@ mode are shown in the sample python code.
 
     ```
     $ rosrun simple_value_iteration_ros sample.py 
-    ### sweep 0 ###
+    ### sweep 1 ###
     values:
     	0 70368744177664		1 1000		2 0	
     	3 70368744177664		4 2000		5 1000	
@@ -34,7 +34,7 @@ mode are shown in the sample python code.
     	3 null		4 up		5 up	
     	6 null		7 up		8 up	
     
-    ### sweep 1 ###
+    ### sweep 2 ###
     values:
     	0 2000		1 1000		2 0	
     	3 3000		4 2000		5 1000	

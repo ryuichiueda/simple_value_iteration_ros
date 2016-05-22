@@ -64,7 +64,7 @@ if __name__ == '__main__':
     rospy.wait_for_service('do_sweeps')
     rospy.wait_for_service('flush_data')
 
-    n = 0
+    n = 1
     print "### sweep %d ###" % n
     delta = do_value_iteration(1,True)
     print_values()
