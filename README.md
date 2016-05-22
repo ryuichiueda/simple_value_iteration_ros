@@ -10,14 +10,14 @@ which is shown in ./scripts/example_state_trans.
 
 1. launch the server
 
-```
+    ```
     $ rosrun simple_value_iteration_ros value_iteration 
     [ INFO] [1463924689.001910579]: Prepared the node
-```
+    ```
 
 2. launch the sample script
 
-```
+    ```
     $ rosrun simple_value_iteration_ros sample.py 
     ### sweep 0 ###
     values:
@@ -40,8 +40,7 @@ which is shown in ./scripts/example_state_trans.
     	0 right		1 right		2 null	
     	3 up		4 up		5 up	
     	6 up		7 up		8 up	
-```
-    
+    ```
 
 # the sample problem
 
@@ -97,7 +96,7 @@ definition.
 A state_transition_file is composed of three sections that start with `%%...'
 In this stage, we cannot change the order of the sections.
 
-```example_state_trans
+    ```example_state_trans
     %%metadata%%
     statenum 9
     actions left right up down
@@ -120,4 +119,4 @@ In this stage, we cannot change the order of the sections.
 
     %%final states%%
     state 2 value 0
-```
+    ```
