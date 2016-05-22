@@ -96,7 +96,6 @@ definition.
 A state_transition_file is composed of three sections that start with `%%...'
 In this stage, we cannot change the order of the sections.
 
-    ```example_state_trans
     %%metadata%%
     statenum 9
     actions left right up down
@@ -119,5 +118,4 @@ In this stage, we cannot change the order of the sections.
 
     %%final states%%
     state 2 value 0
-    ```
 
