@@ -3,57 +3,57 @@ statenum 9
 actions left right up down
 
 %%state transitions%%
-state 0 action right
-	state 1 prob. 1 cost 1000
-state 0 action up
+state 6 action right
+	state 7 prob. 1 cost 1000
+state 6 action up
 	state 3 prob. 1 cost 1000
 
-state 1 action right
-	state 2 prob. 1 cost 1000
-state 1 action up
+state 7 action right
+	state 8 prob. 1 cost 1000
+state 7 action up
 	state 4 prob. 1 cost 1000
-state 1 action left
-	state 0 prob. 1 cost 1000
+state 7 action left
+	state 6 prob. 1 cost 1000
 
-state 2 action up
+state 8 action up
 	state 5 prob. 1 cost 1000
-state 2 action left
-	state 1 prob. 1 cost 1000
+state 8 action left
+	state 7 prob. 1 cost 1000
 
 state 3 action right
 	state 4 prob. 1 cost 1000
 state 3 action up
-	state 6 prob. 1 cost 1000
-state 3 action down
 	state 0 prob. 1 cost 1000
+state 3 action down
+	state 6 prob. 1 cost 1000
 
 state 4 action right
 	state 5 prob. 1 cost 1000
 state 4 action up
-	state 7 prob. 1 cost 1000
-state 4 action down
 	state 1 prob. 1 cost 1000
+state 4 action down
+	state 7 prob. 1 cost 1000
 state 4 action left
 	state 3 prob. 1 cost 1000
 
 state 5 action left
 	state 4 prob. 1 cost 1000
 state 5 action up
-	state 8 prob. 1 cost 1000
+	state 2 prob. 1 cost 1000
 state 5 action down
+	state 8 prob. 1 cost 1000
+
+state 0 action down
+	state 3 prob. 1 cost 1000
+state 0 action right
+	state 1 prob. 1 cost 1000
+
+state 1 action left
+	state 0 prob. 1 cost 1000
+state 1 action down
+	state 4 prob. 1 cost 1000
+state 1 action right
 	state 2 prob. 1 cost 1000
 
-state 6 action down
-	state 3 prob. 1 cost 1000
-state 6 action right
-	state 7 prob. 1 cost 1000
-
-state 7 action left
-	state 6 prob. 1 cost 1000
-state 7 action down
-	state 4 prob. 1 cost 1000
-state 7 action right
-	state 8 prob. 1 cost 1000
-
 %%final states%%
-state 8 value 0
+state 2 value 0

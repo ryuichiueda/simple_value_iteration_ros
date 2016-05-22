@@ -4,18 +4,31 @@ import sys,os
 import rospy,roslib
 from simple_value_iteration_ros.srv import *
 
+def p(f):
+    n = 0
+    for line in f:
+        print '\t' + line.rstrip() + '\t',
+        n = n + 1
+        if n%3 == 0:
+            print ''
+
+    print ''
+
 def do_value_iteration(t_num,init):
     try:
         s = rospy.ServiceProxy('do_sweeps',DoSweeps)
         d = roslib.packages.get_pkg_dir('simple_value_iteration_ros')
-        res = s(work_dir='', state_transition_file=d+'/scripts/example_state_trans',thread_num=t_num,initialize=init)
+        # change this file to example_state_trans_prob if you want to try the probabilistic version
+        res = s(work_dir='',
+            state_transition_file=d+'/scripts/example_state_trans',
+            thread_num=t_num,initialize=init)
 
     except rospy.ServiceException, e:
         print "Service call failed: %s"%e
 
     return res.delta
 
-def get_values():
+def print_values():
     try:
         s = rospy.ServiceProxy('flush_data',FlushData)
 
@@ -27,11 +40,11 @@ def get_values():
 
     with open(v_file,'r') as f:
         print "values:"
-        for line in f: print '\t' + line,
+        p(f)
 
     os.remove(v_file)
 
-def get_policy():
+def print_policy():
     try:
         s = rospy.ServiceProxy('flush_data',FlushData)
 
@@ -41,6 +54,10 @@ def get_policy():
     except rospy.ServiceException, e:
         print "Service call failed: %s"%e
 
+    with open(p_file,'r') as f:
+        print "policy:"
+        p(f)
+
     os.remove(p_file)
     	
 if __name__ == '__main__':
@@ -49,15 +66,15 @@ if __name__ == '__main__':
 
     n = 0
     print "### sweep %d ###" % n
-    delta = do_value_iteration(2,True)
-    get_values()
-    get_policy()
+    delta = do_value_iteration(1,True)
+    print_values()
+    print_policy()
     n = n + 1
 
     while delta > 0.001:
         print "### sweep %d ###" % n
-        delta = do_value_iteration(8,False)
-        get_values()
-        get_policy()
+        delta = do_value_iteration(2,False)
+        print_values()
+        print_policy()
         n = n + 1
     

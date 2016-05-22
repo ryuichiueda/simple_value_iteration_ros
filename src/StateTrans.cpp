@@ -128,6 +128,8 @@ bool StateTrans::printActions(string filename)
 		int a = m_states[i].getActionIndex();
 		if(a >= 0)
 			ofs << i << " " << m_actions[a] << endl;
+		else
+			ofs << i << " " << "null" << endl;
 	}
 	ofs.close();
 	return true;
